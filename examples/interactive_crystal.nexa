@@ -1,0 +1,45 @@
+import { PBRMaterial, OctahedronGeometry } from "nexa/graphics"
+
+// ==========================================
+// Interactive Spatial Crystal Example
+// ==========================================
+
+// 1. Reactive State
+let mut isHovered: bool = false
+let mut isActivated: bool = false
+
+// 2. Spatial Scene Definition
+let mainScene = Scene {
+    // 3D Floating Crystal
+    crystal: Mesh.new(
+        geometry: OctahedronGeometry(radius: 1.0, detail: 2),
+        material: PBRMaterial(
+            color: if isActivated { "#FF0055" } else if isHovered { "#00F0FF" } else { "#7B2CBF" },
+            roughness: 0.1,
+            metallic: 0.95
+        ),
+        
+        // Touch & Pointer Events
+        onPointerEnter: || {
+            isHovered = true
+        },
+        onPointerLeave: || {
+            isHovered = false
+        },
+        onClick: || {
+            isActivated = !isActivated
+        }
+    )
+}
+
+// 3. 120FPS GPU Direct Animation Loop
+on frame(dt: float) {
+    let speed = if isActivated { 3.0 } else { 1.0 }
+    
+    // Continuous rotation
+    mainScene.crystal.rotation.y += dt * speed
+    mainScene.crystal.rotation.x += dt * (speed * 0.5)
+
+    // Floating bobbing motion
+    mainScene.crystal.position.y = Math.sin(Time.elapsed() * 2.0) * 0.2
+}
