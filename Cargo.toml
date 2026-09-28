@@ -1,0 +1,12 @@
+[package]
+name = "nexa"
+version = "0.1.0"
+edition = "2021"
+description = "The Next-Generation Spatial Programming Language for 120FPS Worlds"
+license = "MIT"
+
+[dependencies]
+# CLI（コマンドラインツール）用
+clap = { version = "4.4", features = ["derive"] }
+# ターミナルをカラフルにする用
+colored = "2.1"
